@@ -1,0 +1,70 @@
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  font-weight: 200;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+body {
+  font-size: 16px;
+  text-align: center;
+}
+
+.main {
+  width: 380px;
+  margin: 30px auto;
+  border: 1px solid #ccc;
+}
+
+.canvas {
+  height: 450px;
+  background: #5bd;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.score {
+  position: absolute;
+  font-size: 250%;
+  color: white;
+  font-weight: 800;
+  text-shadow: 2px 2px 0 #666;
+  padding-top: 10px;
+  display: block;
+  width: 100%;
+  text-align: center;
+  z-index: 4;
+}
+
+.bird {
+  position: absolute;
+  background: url('./../img/bird_Sprite.png');
+  width: 40px;
+  height: 28px;
+  left: 80px;
+  top: 45%;
+  animation: flap 0.3s steps(3, end) infinite alternate;  /* step(n, end)函数将动画分为n个间隔进行展示，默认end；使用linear则平滑展示 */
+  z-index: 3;
+}
+
+/* bird 飞行动画定义 */
+@keyframes flap {
+  0% {background-position: 0 84px} /* x=0,y=84px */
+  100% {background-position: 0 0}
+}
+
+.pipe {
+  position: absolute;
+  width: 60px;
+  height: 100%;
+  right: -60px;
+  z-index: 2;
+}
+
+.pipe.hidden {
+  display: none;
+}
