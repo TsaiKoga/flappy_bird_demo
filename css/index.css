@@ -68,3 +68,17 @@ body {
 .pipe.hidden {
   display: none;
 }
+
+.pipe .topHalf {
+	background: url('./../img/pipe.png') bottom;
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
+
+.pipe .bottomHalf {
+	background: url('./../img/pipe.png') top;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
