@@ -8,18 +8,38 @@
  * pipeId [0,1,2...]
  * gapHeight 允许鸟通过的高度
  */
+
 $(function() {
   $canvas = $(".canvas");
   $bird   = $(".bird");
   gameState = 2;
   pipeId = 0;
   gapHeight = 130;
+  fallTime = 1000;
 
   /* Bird */
   function birdFlap() {
+    if(gameState === 1 || gameState === 2) {
+      $bird.css('transform', 'rotate(-20deg)');
+      /* 先上升80px(比管道间隔)，然后身体旋转，之后再下降65px，回到原处，接着落体*/
+      $bird.stop().animate({bottom: '+=80px'}, 350, function() {
+        $bird.css('transform', 'rotate(0deg)');
+        $bird.stop().animate({bottom: '-=80px'}, 350, 'linear', function() {
+          gravity();
+        });
+      });
+    }
   }
 
-  function gravity() {
+  /* 这个函数通过鸟与地面的比例来设置掉落时间 */
+  function gravity(speed=undefined) {
+    birdPercent = parseInt($bird.css('bottom')) / $canvas.height();
+    totalFallTime = fallTime * birdPercent;
+    $bird.stop().animate({
+      bottom: '0'
+    }, totalFallTime, 'linear');
+
+    $bird.css('transform', 'rotate(90deg)', 'slow', 'linear');
   }
 
   /* Pipe */
@@ -50,7 +70,7 @@ $(function() {
     }
   });
 
-  // 一直运行着,当gameState为1，进行操作
+  // 一直运行着,当gameState为1，进行操作,游戏结束要清除
   var int = setInterval(function() {
     if(gameState === 1) {
       generatePipe();
@@ -66,6 +86,10 @@ $(function() {
         }
       }, 1200)
     }, 2050)
+  }
+
+  function gameOver() {
+    clearInterval(int);
   }
 
 })
