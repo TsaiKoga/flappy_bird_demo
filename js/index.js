@@ -12,6 +12,7 @@
 $(function() {
   $canvas = $(".canvas");
   $bird   = $(".bird");
+  $score  = $(".score");
   gameState = 2;
   pipeId = 0;
   gapHeight = 130;
@@ -56,6 +57,8 @@ $(function() {
         if($bird.offset().top < (currentPipe.offset().top + topPipe.height()) || ($bird.offset().top + $bird.height()) > ((currentPipe.offset().top + topPipe.height()) +   gapHeight)){
           gameOver();
         }
+      } else if($bird.offset().left >= (currentPipe.offset().left + currentPipe.width())) {
+        $score.text(currentPipe.attr('pipe-id'));
       }
     }
   }
