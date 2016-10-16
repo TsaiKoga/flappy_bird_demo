@@ -57,6 +57,7 @@ $(function() {
         if($bird.offset().top < (currentPipe.offset().top + topPipe.height()) || ($bird.offset().top + $bird.height()) > ((currentPipe.offset().top + topPipe.height()) +   gapHeight)){
           gameOver();
         }
+        console.log( "bird:" + $bird.offset().left + ", pipe" + currentPipe.attr('pipe-id') + ":" + (currentPipe.offset().left + currentPipe.width()))
       } else if($bird.offset().left >= (currentPipe.offset().left + currentPipe.width())) {
         $score.text(currentPipe.attr('pipe-id'));
       }
@@ -78,7 +79,7 @@ $(function() {
 
   function movePipes() {
     $(".pipe").each(function() {
-      $(this).animate({right: '+=160px'}, 1200, 'linear');
+      $(this).animate({right: '+=170px'}, 1200, 'linear');
     });
   }
 
@@ -120,6 +121,7 @@ $(function() {
     clearInterval(pipesMoveInt);
     $('.pipe').stop(); // 必须stop，不然由于movePipes()设置的时间间隔还会滑行一段距离
     gameState = 0;
+    $('.gameOver').show();
   }
 
 })

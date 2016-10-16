@@ -82,3 +82,19 @@ body {
 	bottom: 0;
 	width: 100%;
 }
+
+.gameOver {
+  position: absolute;
+  top: 45%;
+  font-size: 350%;
+  color: white;
+  font-weight: 800;
+  text-shadow: 2px 2px 0 #666;
+  padding-top: 10px;
+  width: 100%;
+  text-align: center;
+  z-index: 5;
+}
+.gameOver.hidden {
+  display: none;
+}
