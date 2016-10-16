@@ -23,8 +23,10 @@ $(function() {
       $bird.css('transform', 'rotate(-20deg)');
       /* 先上升80px(比管道间隔)，然后身体旋转，之后再下降65px，回到原处，接着落体*/
       $bird.stop().animate({bottom: '+=80px'}, 350, function() {
+        isBirdDied();
         $bird.css('transform', 'rotate(0deg)');
         $bird.stop().animate({bottom: '-=80px'}, 350, 'linear', function() {
+          isBirdDied();
           gravity();
         });
       });
@@ -32,7 +34,7 @@ $(function() {
   }
 
   /* 这个函数通过鸟与地面的比例来设置掉落时间 */
-  function gravity(speed=undefined) {
+  function gravity() {
     birdPercent = parseInt($bird.css('bottom')) / $canvas.height();
     totalFallTime = fallTime * birdPercent;
     $bird.stop().animate({
@@ -40,6 +42,22 @@ $(function() {
     }, totalFallTime, 'linear');
 
     $bird.css('transform', 'rotate(90deg)', 'slow', 'linear');
+  }
+
+  function isBirdDied() {
+    if(parseInt($bird.css('bottom')) === 0){
+      gameOver();
+    }
+    currentPipe = $('.pipe:nth-of-type(4)');
+    if(currentPipe.length > 0) {
+      topPipe = $('.pipe:nth-of-type(4) .topHalf');
+      bottomPipe = $('.pipe:nth-of-type(4) .bottomHalf');
+      if(($bird.offset().left + $bird.width()) >= currentPipe.offset().left && $bird.offset().left <= (currentPipe.offset().left + currentPipe.width())) {
+        if($bird.offset().top < (currentPipe.offset().top + topPipe.height()) || ($bird.offset().top + $bird.height()) > ((currentPipe.offset().top + topPipe.height()) +   gapHeight)){
+          gameOver();
+        }
+      }
+    }
   }
 
   /* Pipe */
@@ -71,12 +89,18 @@ $(function() {
   });
 
   // 一直运行着,当gameState为1，进行操作,游戏结束要清除
-  var int = setInterval(function() {
+  var pipesMoveInt = setInterval(function() {
     if(gameState === 1) {
       generatePipe();
       movePipes();
     }
   }, 1200);
+
+  var isBirdDiedInt = setInterval(function() {
+    if(gameState === 1 || gameState === 2) {
+      isBirdDied();
+    }
+  }, 10)
 
   function deleteInterval() {
     setTimeout(function() {
@@ -89,7 +113,10 @@ $(function() {
   }
 
   function gameOver() {
-    clearInterval(int);
+    clearInterval(isBirdDiedInt);
+    clearInterval(pipesMoveInt);
+    $('.pipe').stop(); // 必须stop，不然由于movePipes()设置的时间间隔还会滑行一段距离
+    gameState = 0;
   }
 
 })
